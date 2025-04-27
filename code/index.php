@@ -1,0 +1,100 @@
+<?php
+session_start();
+
+// Controllo login
+$is_logged = isset($_SESSION['id_persona']);
+
+// Connessione al database
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'my_iisvalentin';
+$conn = new mysqli($host, $username, $password, $database);
+
+if ($conn->connect_error) {
+    die("Connessione fallita: " . $conn->connect_error);
+}
+
+// Query offerte
+$query = "SELECT * FROM FigureProfessionale";
+$result = $conn->query($query);
+?>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillMatch</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+    <div id="header">
+        <div id="logo">
+            <h1>SkillMatch</h1>
+        </div>
+        <div id="navbar">
+            <form action="risultati_ricerca.php" method="GET">
+                <input type="text" id="termine_ricerca" name="termine_ricerca" placeholder="Cerca un lavoro...">
+                <input type="submit" value="Cerca">
+            </form>
+            <div class="right-buttons">
+                <?php if (!$is_logged): ?>
+                    <a href="sign-In.php">
+                        <h3 id="signin">Sign-In</h3>
+                    </a>
+                    <a href="sign-Up.php">
+                        <h3 id="signup">Sign-Up</h3>
+                    </a>
+                <?php else: ?>
+                    <form action="logout.php" method="post" style="display:inline;">
+                        <button type="submit" style="background:none;border:none;color:white;font-size:1.2em;cursor:pointer;">Logout</button>
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div id="container-content">
+        <div id="content">
+            <h2>Offerte di Lavoro</h2>
+            <?php if ($result && $result->num_rows > 0): ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <div class="job-offer">
+                        <h3><?php echo htmlspecialchars($row['titolo']); ?></h3>
+                        <p><strong>Azienda:</strong> <?php echo htmlspecialchars($row['nomeAzienda']); ?></p>
+                        <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($row['indirizzo']); ?></p>
+                        <p><strong>Età richiesta:</strong> <?php echo htmlspecialchars($row['età_min']); ?> - <?php echo htmlspecialchars($row['età_max']); ?> anni</p>
+                        <p><strong>Anni di esperienza richiesti:</strong> <?php echo htmlspecialchars($row['anni_esperienza']); ?></p>
+                        <p><strong>Descrizione:</strong> <?php echo htmlspecialchars($row['descrizione']); ?></p>
+
+                        <?php if ($is_logged): ?>
+                            <form action="accetta_offerta.php" method="post">
+                                <input type="hidden" name="id_offerta" value="<?php echo $row['id']; ?>">
+                                <button type="submit">Accetta</button>
+                            </form>
+                        <?php else: ?>
+                            <p><em>Accedi per candidarti!</em></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>Non ci sono offerte disponibili al momento.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div id="footer">
+        <!-- Footer -->
+    </div>
+</body>
+</html>
+
+<?php
+$conn->close();
+?>

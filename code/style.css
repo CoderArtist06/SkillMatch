@@ -1,0 +1,139 @@
+/* Stili generali */
+body {
+    font-family: 'Oswald', sans-serif; /* Applica il font Oswald al body */
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa; /* Sfondo generale chiaro */
+    color: #333; /* Colore del testo */
+}
+
+/* Header */
+#header {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex; /* Utilizziamo flexbox per il layout */
+    flex-direction: column; /* Disponiamo gli elementi in colonna */
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Aggiungiamo un'ombra */
+}
+
+#logo {
+    background: linear-gradient(90deg, #007BFF, #0056b3); /* Sfondo gradiente blu */
+    text-align: left; /* Posizionamento a sinistra del testo */
+    padding-top: 2vh; /* Aggiungiamo padding sopra e sotto */
+    padding-bottom: 2vh;
+    padding-left: 2.5vh; /* Aggiungiamo un padding a sinistra */
+    color: white;
+}
+
+#logo h1 {
+    margin: 0;
+    font-size: 2.8vh;
+    letter-spacing: 1px;
+}
+
+/* Navbar */
+#navbar {
+    background-color: #f8f9fa; /* Colore chiaro per la navbar */
+    display: flex;
+    justify-content: space-between; /* Distribuiamo gli elementi orizzontalmente */
+    align-items: center;
+    padding: 1.5vh 2.5vh;
+    border-bottom: 2px solid #007BFF; /* Bordo sotto la navbar */
+}
+
+#navbar form {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+#navbar input[type="text"] {
+    padding: 1vh;
+    border: 1px solid #ccc;
+    border-radius: 0.5vh;
+    font-size: 1.6vh;
+    transition: border-color 0.3s;
+    outline: none;
+}
+
+#navbar input[type="text"]:focus {
+    border-color: #007BFF;
+}
+
+#navbar input[type="submit"] {
+    padding: 1vh 2vh;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 0.6vh;
+    cursor: pointer;
+    font-size: 1.6vh;
+    margin-left: 1vh;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#navbar input[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Leggera animazione sull'hover */
+}
+
+#navbar a {
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+#navbar h3 {
+    margin: 0;
+    padding: 1vh 2vh;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 0.8vh;
+    font-size: 1.8vh;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+/* Stili specifici per i bottoni */
+#navbar a h3 {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 1vh 2vh;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.6vh;
+    margin: 0.4vh 0.2vh;
+    cursor: pointer;
+    border-radius: 0.8vh;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Effetto hover sui bottoni */
+#navbar a h3:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Leggera animazione sull'hover */
+}
+
+/* Content */
+/* Stili per il contenitore del contenuto */
+#container-content {
+    width: 100%; /* Il contenitore occupa tutta la larghezza */
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente il contenuto */
+    background-color: #e9ecef; /* Sfondo più chiaro */
+    padding: 3vh 0;
+}
+
+/* Stili per il contenuto */
+#content {
+    max-width: 65%; /* Larghezza massima del contenuto */
+    width: 100%; /* Il contenuto occupa tutta la larghezza disponibile nel contenitore */
+    min-height: 90vh;
+    box-sizing: border-box; /* Assicura che padding e bordi siano inclusi nella larghezza */
+    padding: 4vh 3vh; /* Aggiunge un po' di spazio interno */
+    background-color: white;
+    border-radius: 1.2vh; /* Angoli arrotondati */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra leggera */
+}
