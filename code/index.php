@@ -2,7 +2,7 @@
 session_start();
 
 // Controllo login
-$is_logged = isset($_SESSION['id_persona']);
+$is_logged = isset($_SESSION['email']);
 
 // Connessione al database
 $host = 'localhost';
@@ -53,7 +53,12 @@ $result = $conn->query($query);
                     </a>
                 <?php else: ?>
                     <form action="logout.php" method="post" style="display:inline;">
-                        <button type="submit" style="background:none;border:none;color:white;font-size:1.2em;cursor:pointer;">Logout</button>
+                    <a href="index.php">
+                        <h3 id="signup">Log-Out</h3>
+                        <?php
+                        	unset($_SESSION['email']);
+                        ?>
+                    </a>
                     </form>
                 <?php endif; ?>
             </div>
@@ -62,24 +67,25 @@ $result = $conn->query($query);
 
     <div id="container-content">
         <div id="content">
-            <h2>Offerte di Lavoro</h2>
+            <h1>Le nostre offerte di lavoro</h1>
             <?php if ($result && $result->num_rows > 0): ?>
                 <?php while($row = $result->fetch_assoc()): ?>
                     <div class="job-offer">
-                        <h3><?php echo htmlspecialchars($row['titolo']); ?></h3>
-                        <p><strong>Azienda:</strong> <?php echo htmlspecialchars($row['nomeAzienda']); ?></p>
-                        <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($row['indirizzo']); ?></p>
-                        <p><strong>Età richiesta:</strong> <?php echo htmlspecialchars($row['età_min']); ?> - <?php echo htmlspecialchars($row['età_max']); ?> anni</p>
-                        <p><strong>Anni di esperienza richiesti:</strong> <?php echo htmlspecialchars($row['anni_esperienza']); ?></p>
-                        <p><strong>Descrizione:</strong> <?php echo htmlspecialchars($row['descrizione']); ?></p>
+                    	<hr class="riga">
+                        <h1><?php echo htmlspecialchars($row['titolo']); ?></h1>
+                        <h3><strong>Azienda:</strong> <?php echo htmlspecialchars($row['nomeAzienda']); ?></p>
+                        <h3><strong>Indirizzo:</strong> <?php echo htmlspecialchars($row['indirizzo']); ?></h3>
+                        <h3><strong>Età richiesta:</strong> <?php echo htmlspecialchars($row['età_min']); ?> - <?php echo htmlspecialchars($row['età_max']); ?> anni</h3>
+                        <h3><strong>Anni di esperienza richiesti:</strong> <?php echo htmlspecialchars($row['anni_esperienza']); ?></h3>
+                        <h3><strong>Descrizione:</strong> <?php echo htmlspecialchars($row['descrizione']); ?></h3>
 
                         <?php if ($is_logged): ?>
                             <form action="accetta_offerta.php" method="post">
-                                <input type="hidden" name="id_offerta" value="<?php echo $row['id']; ?>">
-                                <button type="submit">Accetta</button>
+                                <input type="submit" name="id_offerta" value="<?php echo $row['id']; ?>">
+                                <button>Accetta</button>
                             </form>
                         <?php else: ?>
-                            <p><em>Accedi per candidarti!</em></p>
+                            <h3 style="color:blue"><em>Accedi per candidarti!</em></h3>
                         <?php endif; ?>
                     </div>
                 <?php endwhile; ?>

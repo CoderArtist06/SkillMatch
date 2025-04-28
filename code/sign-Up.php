@@ -1,22 +1,18 @@
 <?php 
-session_start(); // Avvio sessione
+session_start();
 
 $host = 'localhost';
 $username = 'root';
 $password = '';
 $database = 'my_iisvalentin';
 
-// Connessione al database
 $conn = new mysqli($host, $username, $password, $database);
 
-// Verifica connessione
 if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
-// Controlla se il form è stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Raccolta dati dal form
     $nomeForm = $_POST['nome'];
     $cognomeForm = $_POST['cognome'];
     $dataNascitaForm = $_POST['dataN'];
@@ -25,21 +21,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefonoForm = $_POST['telefono'];
     $emailForm = $_POST['email'];
     $passwordForm = $_POST['password'];
-    
-    // Gestione file CV
-    $cvFile = file_get_contents($_FILES['cv']['tmp_name']);
-    // Gestione file Foto
-    $fotoFile = file_get_contents($_FILES['foto']['tmp_name']);
 
-    // Inserimento dati nel database
-    $sql = "INSERT INTO Persona (nome, cognome, dataNascita, residenza, codiceFiscale, telefono, email, password, cv, foto)
+    /* 
+        È fondamentale salvare la password in un formato non leggibile, ad esempio utilizzando una funzione di hashing:
+
+        $passwordForm = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+        Il problema emerge al momento del login: non riesco a verificare se la password corrisponde a quella salvata per l'utente registrato.
+    */
+
+    // Gestione file CV
+    $cvFile = null;
+    if (isset($_FILES['cv']) && $_FILES['cv']['error'] == UPLOAD_ERR_OK) {
+        $cvFile = file_get_contents($_FILES['cv']['tmp_name']);
+    }
+
+    // Gestione file Foto
+    $fotoFile = null;
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
+        $fotoFile = file_get_contents($_FILES['foto']['tmp_name']);
+    }
+
+    $sql = "INSERT INTO Persona (nome, cognome, età, residenza, codiceFiscale, telefono, email, password, cv, foto)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         $stmt->bind_param(
-            "sssssissbb", 
+            "ssssssssss", 
             $nomeForm, 
             $cognomeForm, 
             $dataNascitaForm, 
@@ -55,12 +65,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             echo "<script>alert('Registrazione avvenuta con successo!'); window.location.href='sign-In.php';</script>";
         } else {
-            echo "<script>alert('Errore durante la registrazione.');</script>";
+            echo "Errore durante l'inserimento: " . $stmt->error;
         }
 
         $stmt->close();
     } else {
-        echo "Errore nella preparazione della query.";
+        echo "Errore nella preparazione della query: " . $conn->error;
     }
 }
 
