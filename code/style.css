@@ -178,10 +178,33 @@ strong {
 
 /* Footer */
 #footer {
-    margin-top: 5vh;
-    padding: 2vh;
-    background-color: #f8f9fa; /* Sfondo chiaro */
+    background-color: white; /* Stesso sfondo chiaro del content */
+    color: #555; /* Testo leggermente più scuro del body */
+    padding: 3vh 0; /* Stesso padding verticale del container-content */
     text-align: center;
-    font-size: 1.6vh;
-    color: #777; /* Testo grigio */
+    font-size: 0.9em;
+    border-top: 2px solid #007BFF; /* Stesso bordo blu della navbar */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* Leggera ombra superiore */
+}
+
+.footer-content {
+    max-width: 65%; /* Stessa larghezza massima del content */
+    margin: 0 auto;
+    padding: 1.5vh 0; /* Un po' di padding interno */
+}
+
+.footer-content p {
+    margin: 0.8vh 0;
+}
+
+.footer-content a {
+    color: #007BFF; /* Stesso colore blu dei link principali */
+    text-decoration: none;
+    margin: 0 1vh;
+    transition: color 0.3s;
+}
+
+.footer-content a:hover {
+    color: #0056b3; /* Sfumatura più scura al passaggio del mouse */
+    text-decoration: underline;
 }

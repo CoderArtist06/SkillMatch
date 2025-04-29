@@ -15,7 +15,7 @@ if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
-// 🔧 Controllo se è stato inviato un termine di ricerca
+//Controllo se è stato inviato un termine di ricerca
 if (isset($_GET['termine_ricerca']) && !empty(trim($_GET['termine_ricerca']))) {
     $termine = $conn->real_escape_string($_GET['termine_ricerca']);
     $query = "SELECT * FROM FigureProfessionale 
@@ -48,7 +48,7 @@ $result = $conn->query($query);
             <h1>SkillMatch</h1>
         </div>
         <div id="navbar">
-            <!-- 🔧 Modificato il form per puntare a index.php -->
+            <!-- Modificato il form per puntare a index.php -->
             <form action="index.php" method="GET">
                 <input type="text" id="termine_ricerca" name="termine_ricerca" placeholder="Cerca un lavoro..." value="<?php echo isset($_GET['termine_ricerca']) ? htmlspecialchars($_GET['termine_ricerca']) : ''; ?>">
                 <input type="submit" value="Cerca">
@@ -63,7 +63,7 @@ $result = $conn->query($query);
                     </a>
                 <?php else: ?>
                     <form action="logout.php" method="post" style="display:inline;">
-                        <button type="submit"><h3 id="signup">Log-Out</h3></button>
+                        <input type="submit" value="Log-Out" id="signup">
                     </form>
                 <?php endif; ?>
             </div>
@@ -87,7 +87,7 @@ $result = $conn->query($query);
                         <?php if ($is_logged): ?>
                             <form action="accetta_offerta.php" method="POST">
                                 <input type="hidden" name="offerta_id" value="<?php echo htmlspecialchars($row['ID_f']); ?>">
-                                <input type="submit" name="submit" value="Accetta">
+                                <input type="submit" name="submit" value="Candidati ora!">
                             </form>
                         <?php else: ?>
                             <h3 style="color:blue"><em>Accedi per candidarti!</em></h3>
@@ -101,7 +101,12 @@ $result = $conn->query($query);
     </div>
 
     <div id="footer">
-        <!-- Footer -->
+        <div class="footer-content">
+            <p>&copy; 2025 SkillMatch - Trova il lavoro perfetto per te!</p>
+            <p>Sviluppato con passione da Ghita Valentin Cristian & Cavazzini Fabio</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Termini e Condizioni</a></p>
+            <p>Licenza: GPL-3.0</p>
+        </div>
     </div>
 </body>
 </html>
