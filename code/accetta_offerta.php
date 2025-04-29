@@ -22,7 +22,7 @@ if (isset($_POST["submit"]) && isset($_POST['offerta_id'])) {
     $idOfferta = $_POST['offerta_id'];
 
     // Recupera il CF della persona
-    $sqlPersona = "SELECT CF FROM Persona WHERE email = ?";
+    $sqlPersona = "SELECT CF, nome FROM Persona WHERE email = ?";
     $stmtPersona = $conn->prepare($sqlPersona);
     $stmtPersona->bind_param("s", $emailUtente);
     $stmtPersona->execute();
@@ -31,6 +31,7 @@ if (isset($_POST["submit"]) && isset($_POST['offerta_id'])) {
     if ($resultPersona->num_rows == 1) {
         $rowPersona = $resultPersona->fetch_assoc();
         $cfUtente = $rowPersona['CF'];
+        $nomeUtente = $rowPersona['nome'];
 
         // Verifica se esiste già un interesse per questa offerta
         $sqlCheck = "SELECT * FROM Interessata WHERE CF_p = ? AND ID_f = ?";
@@ -49,6 +50,37 @@ if (isset($_POST["submit"]) && isset($_POST['offerta_id'])) {
 
             if ($stmtInsert->execute()) {
                 echo "Candidatura inviata con successo!";
+                
+                // EMAIL
+                $dataCandidatura = new DateTime();
+                $giorniAggiunti = 0;
+                while ($giorniAggiunti < 7) {
+                    $dataCandidatura->modify('+1 day');
+                    $giornoSettimana = $dataCandidatura->format('N'); // 1 (Lunedì) - 7 (Domenica)
+                    if ($giornoSettimana >= 1 && $giornoSettimana <= 5) { // Esclude sabato e domenica
+                        $giorniAggiunti++;
+                    }
+                }
+                $dataAppuntamento = $dataCandidatura->format('Y-m-d');
+                
+                $to = $_SESSION['email'];
+                $subject = "Conferma dell'Appuntamento - SkillMatch";
+                $message = "Gentile " . $nomeUtente . ",\n\n"
+                        . "Siamo lieti di confermare il suo appuntamento previsto per il giorno: " . $dataAppuntamento . ".\n\n"
+                        . "Il colloquio si terrà presso la sede dell'offerta di lavoro di cui ha fatto richiesta.\n\n"
+                        . "La preghiamo di contattarci per qualsiasi ulteriore informazione o esigenza.\n\n"
+                        . "Cordiali saluti,\n"
+                        . "Il Team di SkillMatch";
+                $headers = "From: info@skillmatch.com\r\n";
+                $headers .= "Reply-To: info@skillmatch.com\r\n";
+                $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+
+                if (mail($to, $subject, $message, $headers)) {
+                    echo "Email inviata con successo!";
+                } else {
+                    echo "Errore nell'invio dell'email.";
+                }
+                
                 header("Location: index.php");
                 exit();
             } else {
