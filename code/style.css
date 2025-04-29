@@ -94,7 +94,7 @@ body {
     cursor: pointer;
 }
 
-/* Stili specifici per i bottoni */
+/* Stili specifici per i bottoni nella navbar */
 #navbar a h3 {
     background-color: #007BFF;
     color: white;
@@ -122,7 +122,7 @@ body {
     width: 100%; /* Il contenitore occupa tutta la larghezza */
     display: flex;
     justify-content: center; /* Centra orizzontalmente il contenuto */
-    background-color: #e9ecef; /* Sfondo piÃ¹ chiaro */
+    background-color: #e9ecef; /* Sfondo più chiaro */
     padding: 3vh 0;
 }
 
@@ -138,13 +138,50 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra leggera */
 }
 
+/* Riga divisoria */
 .riga {
-	border: 0.2vh solid #007BFF;
+    border: 0.2vh solid #007BFF;
     margin-top: 4vh;
     margin-bottom: 4vh;
 }
 
+/* Stile per il testo evidenziato */
 strong {
-	color: #007BFF;
-	font-size: 17pt;
+    color: #007BFF;
+    font-size: 17pt;
+}
+
+/* Stili specifici per le offerte di lavoro */
+.job-offer h3 {
+    font-size: 1.8vh;
+    margin-bottom: 1vh;
+}
+
+/* Stili per il bottone "Accetta" */
+#content form input {
+    background-color: #007BFF; /* Colore blu */
+    color: white; /* Testo bianco */
+    border: none; /* Nessun bordo */
+    padding: 1vh 2vh; /* Padding interno */
+    font-size: 1.6vh; /* Dimensione testo */
+    border-radius: 0.8vh; /* Angoli arrotondati */
+    cursor: pointer; /* Puntatore a mano */
+    transition: background-color 0.3s, transform 0.2s; /* Transizione su hover */
+    margin-top: 2vh; /* Spaziatura sopra */
+}
+
+/* Effetto hover sul bottone "Accetta" */
+#content form input:hover {
+    background-color: #0056b3; /* Colore più scuro */
+    transform: scale(1.05); /* Leggera animazione sull'hover */
+}
+
+/* Footer */
+#footer {
+    margin-top: 5vh;
+    padding: 2vh;
+    background-color: #f8f9fa; /* Sfondo chiaro */
+    text-align: center;
+    font-size: 1.6vh;
+    color: #777; /* Testo grigio */
 }

@@ -15,8 +15,17 @@ if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
-// Query offerte
-$query = "SELECT * FROM FigureProfessionale";
+// 🔧 Controllo se è stato inviato un termine di ricerca
+if (isset($_GET['termine_ricerca']) && !empty(trim($_GET['termine_ricerca']))) {
+    $termine = $conn->real_escape_string($_GET['termine_ricerca']);
+    $query = "SELECT * FROM FigureProfessionale 
+              WHERE titolo LIKE '%$termine%' 
+                 OR nomeAzienda LIKE '%$termine%' 
+                 OR descrizione LIKE '%$termine%'";
+} else {
+    $query = "SELECT * FROM FigureProfessionale";
+}
+
 $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
@@ -39,8 +48,9 @@ $result = $conn->query($query);
             <h1>SkillMatch</h1>
         </div>
         <div id="navbar">
-            <form action="risultati_ricerca.php" method="GET">
-                <input type="text" id="termine_ricerca" name="termine_ricerca" placeholder="Cerca un lavoro...">
+            <!-- 🔧 Modificato il form per puntare a index.php -->
+            <form action="index.php" method="GET">
+                <input type="text" id="termine_ricerca" name="termine_ricerca" placeholder="Cerca un lavoro..." value="<?php echo isset($_GET['termine_ricerca']) ? htmlspecialchars($_GET['termine_ricerca']) : ''; ?>">
                 <input type="submit" value="Cerca">
             </form>
             <div class="right-buttons">
@@ -53,12 +63,7 @@ $result = $conn->query($query);
                     </a>
                 <?php else: ?>
                     <form action="logout.php" method="post" style="display:inline;">
-                    <a href="index.php">
-                        <h3 id="signup">Log-Out</h3>
-                        <?php
-                        	unset($_SESSION['email']);
-                        ?>
-                    </a>
+                        <button type="submit"><h3 id="signup">Log-Out</h3></button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -71,18 +76,18 @@ $result = $conn->query($query);
             <?php if ($result && $result->num_rows > 0): ?>
                 <?php while($row = $result->fetch_assoc()): ?>
                     <div class="job-offer">
-                    	<hr class="riga">
+                        <hr class="riga">
                         <h1><?php echo htmlspecialchars($row['titolo']); ?></h1>
-                        <h3><strong>Azienda:</strong> <?php echo htmlspecialchars($row['nomeAzienda']); ?></p>
+                        <h3><strong>Azienda:</strong> <?php echo htmlspecialchars($row['nomeAzienda']); ?></h3>
                         <h3><strong>Indirizzo:</strong> <?php echo htmlspecialchars($row['indirizzo']); ?></h3>
                         <h3><strong>Età richiesta:</strong> <?php echo htmlspecialchars($row['età_min']); ?> - <?php echo htmlspecialchars($row['età_max']); ?> anni</h3>
                         <h3><strong>Anni di esperienza richiesti:</strong> <?php echo htmlspecialchars($row['anni_esperienza']); ?></h3>
                         <h3><strong>Descrizione:</strong> <?php echo htmlspecialchars($row['descrizione']); ?></h3>
 
                         <?php if ($is_logged): ?>
-                            <form action="accetta_offerta.php" method="post">
-                                <input type="submit" name="id_offerta" value="<?php echo $row['id']; ?>">
-                                <button>Accetta</button>
+                            <form action="accetta_offerta.php" method="POST">
+                                <input type="hidden" name="offerta_id" value="<?php echo htmlspecialchars($row['ID_f']); ?>">
+                                <input type="submit" name="submit" value="Accetta">
                             </form>
                         <?php else: ?>
                             <h3 style="color:blue"><em>Accedi per candidarti!</em></h3>
